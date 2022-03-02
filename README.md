@@ -2,7 +2,7 @@
 
 ## Data
 
-I got data from [here](https://drive.google.com/file/d/0BxDIywue_VABY1dRcFVvZ3BodnM/view?usp=sharing). Download it and name it as `data`.
+I got data from [here](https://drive.google.com/file/d/0BxDIywue_VABY1dRcFVvZ3BodnM/view?usp=sharing). You should apply for permission first. Download it and name it as `data`.
 
 ## Model
 
