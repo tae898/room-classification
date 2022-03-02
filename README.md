@@ -4,6 +4,10 @@
 
 I got data from [here](https://drive.google.com/file/d/0BxDIywue_VABY1dRcFVvZ3BodnM/view?usp=sharing). Download it and name it as `data`.
 
+## Model
+
+You can download a pretrained model from [here](https://github.com/tae898/room-classification/releases/download/v0.1/model.ckpt). It's a fine-tuned [EfficientNet-b3](https://github.com/lukemelas/EfficientNet-PyTorch) using [pytorch-lightning](https://www.pytorchlightning.ai/)
+
 ## Prerequisites
 
 1. A unix or unix-like x86 machine
