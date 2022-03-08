@@ -67,7 +67,17 @@ The Python client sends an image to the server. This image is either an image sa
   python client.py --mode image --image-path path/to/the/image.jpg
   ```
 
-  This will save the results at `path/to/the/image.jpg.json`
+  This will save the results at `path/to/the/image.jpg.json`. It'll look something like this:
+
+  ```json
+  "interior": 0.0012067470233887434,
+  "bathroom": 0.004016552586108446,
+  "bedroom": 0.9945330619812012,
+  "exterior": 9.643802059144946e-07,
+  "living_room": 0.00022632408945355564,
+  "kitchen": 9.742022484715562e-06,
+  "dining_room": 6.571232916030567e-06
+  ```
 
 - Run the room-classifier on webcam:
 
@@ -76,6 +86,8 @@ The Python client sends an image to the server. This image is either an image sa
   ```
 
   ![webcam-demo](misc/webcam.png)
+
+  [Also check out the video](https://youtu.be/cM01mHaAtNA)!
 
 ## TODOs
 
