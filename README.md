@@ -6,13 +6,13 @@ I got data from [here](https://drive.google.com/file/d/0BxDIywue_VABY1dRcFVvZ3Bo
 
 ## Model
 
-You can download a pretrained model from [here](https://github.com/tae898/room-classification/releases/download/v0.1/model.ckpt). It's a fine-tuned [EfficientNet-b3](https://github.com/lukemelas/EfficientNet-PyTorch) using [pytorch-lightning](https://www.pytorchlightning.ai/)
+You can download a pretrained model from [here](https://github.com/tae898/room-classification/releases/download/v0.2/model.ckpt). It's a fine-tuned [EfficientNet-b3](https://github.com/lukemelas/EfficientNet-PyTorch) using [pytorch-lightning](https://www.pytorchlightning.ai/)
 
 ## Prerequisites
 
 1. A unix or unix-like x86 machine
-1. python 3.8 or higher.
-1. Running in a virtual environment (e.g., conda, virtualenv, etc.) is highly recommended so that you don't mess up with the system python.
+1. Python 3.8 or higher.
+1. Running in a virtual environment (e.g., conda, virtualenv, etc.) is highly recommended so that you don't mess up with the system Python.
 1. `pip install -r requirements.txt`
 
 ## Understand data, training, and evaluation
@@ -28,7 +28,7 @@ You can download a pretrained model from [here](https://github.com/tae898/room-c
 This Flask server is implemented in [`app.py`](app.py). It receives an image and outputs a
 probability distribution over the seven room types (i.e., interior, bathroom, bedroom, exterior, living_room, kitchen, and dining_room).
 
-There are two ways to run the server. You can either run in natively in Python or as a docker container. The docker way is recommended.
+There are two ways to run the server. You can either run it natively in Python or as a docker container. The docker way is recommended.
 
 - The [docker](https://docs.docker.com/get-docker/) way (recommended)
 
@@ -37,29 +37,29 @@ There are two ways to run the server. You can either run in natively in Python o
      ```
      docker run -it --rm -p 10005:10005 --gpus all tae898/room-classification-cuda
      ```
-  1. For CPU
+  1. For CPU,
      ```
-     docker run -it --rm -p 10005:10005 tae898/room-classification-cuda
+     docker run -it --rm -p 10005:10005 tae898/room-classification
      ```
 
 - Running natively in Python (GPUs are supported)
 
   1. First do [Prerequisites](#prerequisites)
-  1. Download [`model.ckpt`](https://github.com/tae898/room-classification/releases/download/v0.2/model.ckpt) and place it in the root repo directory.
-  1. ```sh
+  2. Download [`model.ckpt`](https://github.com/tae898/room-classification/releases/download/v0.2/model.ckpt) and place it in the root repo directory.
+  3. ```sh
      python app.py
      ```
 
 ### Client
 
-The Python client either sends an image to the server. This image is either saved in your disk or your webcam stream.
+The Python client sends an image to the server. This image is either an image saved in your disk or your webcam stream.
 
 1. First do [Prerequisites](#prerequisites)
-1. Install requirements
+2. Install requirements
    ```sh
    pip install -r requirements-client.txt
    ```
-1. Run the [server](#server)
+3. Run the [server](#server)
 
 - Run the room-classifier on the image saved in your disk:
 
@@ -79,7 +79,9 @@ The Python client either sends an image to the server. This image is either save
 
 ## TODOs
 
-1. Make it lighter
+1. Make it lighter.
+2. Better docstring.
+3. More love.
 
 ## Contributing
 
