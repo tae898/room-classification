@@ -8,8 +8,7 @@ import random
 from glob import glob
 
 import albumentations as A
-# for albumentations uses cv2 where as torchvision transforms uses PIL
-import cv2
+import numpy as np
 # pytorch-lightning on top of PyTorch framework
 import pytorch_lightning as pl
 # PyTorch - deep learning framework
@@ -20,11 +19,15 @@ import torchmetrics
 from albumentations.pytorch.transforms import ToTensorV2 as ToTensor
 # for efficient model transfer learning
 from efficientnet_pytorch import EfficientNet
+# for albumentations uses cv2 where as torchvision transforms uses PIL
+from PIL import Image
 from pytorch_lightning import seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
+
+from utils import resize_square_image
 
 
 def get_splits(
@@ -68,7 +71,9 @@ def get_splits(
 class RoomEfficientNet(pl.LightningModule):
     """EfficientNet class for training and inference."""
 
-    def __init__(self, num_classes: int, efficientnet: str) -> None:
+    def __init__(
+        self, num_classes: int, efficientnet: str, weights_path: str = None
+    ) -> None:
         """
         Args
         ----
@@ -78,7 +83,7 @@ class RoomEfficientNet(pl.LightningModule):
         """
         super().__init__()
         self.efficient_net = EfficientNet.from_pretrained(
-            efficientnet, num_classes=num_classes
+            efficientnet, num_classes=num_classes, weights_path=weights_path
         )
         in_features = self.efficient_net._fc.in_features
         self.efficient_net._fc = nn.Linear(in_features, num_classes)
@@ -122,7 +127,6 @@ class RoomEfficientNet(pl.LightningModule):
         self.log("val_loss", loss, prog_bar=True, logger=True)
 
     def test_step(self, batch, batch_idx) -> None:
-        """This doesn't work somehow."""
         x, y = batch["x"], batch["y"]
         y_hat = self(x)
         loss = F.cross_entropy(y_hat, y)
@@ -135,20 +139,23 @@ class RoomEfficientNet(pl.LightningModule):
 class RoomDataset(Dataset):
     """Pytorch-compatible room type dataset"""
 
-    def __init__(self, paths: list, transform, label2idx: dict) -> None:
+    def __init__(
+        self, paths: list, transform, label2idx: dict, image_size: int
+    ) -> None:
         """
         Args
         ----
         paths: image paths to load.
         transform:
         label2idx:
+        image_size:
 
         """
         super().__init__()
         self.paths = paths
         self.transform = transform
-
         self.label2idx = label2idx
+        self.image_size = image_size
 
     def __len__(self):
         return len(self.paths)
@@ -156,9 +163,12 @@ class RoomDataset(Dataset):
     def __getitem__(self, item):
         """Get x (data) and y (label)."""
         path = self.paths[item]
-        img = cv2.imread(path)
+        img = Image.open(path)
+        img = img.convert("RGB")
 
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = resize_square_image(img, width=self.image_size)
+        img = np.array(img)
+
         img = self.transform(image=img)
 
         # albumentations transform return a dictionary with "image" as key
@@ -186,12 +196,13 @@ class RoomDataModule(pl.LightningDataModule):
 
         """
         super().__init__()
+        self.image_size = image_size
         self.train_transform = A.Compose(
             [
-                A.Resize(int(image_size * 1.1), int(image_size * 1.1)),
-                A.RandomCrop(image_size, image_size),
+                # A.Resize(int(image_size * 1.1), int(image_size * 1.1)),
+                # A.RandomCrop(image_size, image_size),
                 A.HorizontalFlip(),
-                A.VerticalFlip(),
+                # A.VerticalFlip(),
                 A.ShiftScaleRotate(),
                 A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
                 ToTensor(),
@@ -199,7 +210,7 @@ class RoomDataModule(pl.LightningDataModule):
         )
         self.test_transform = A.Compose(
             [
-                A.Resize(image_size, image_size),
+                # A.Resize(image_size, image_size),
                 A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
                 ToTensor(),
             ]
@@ -237,14 +248,21 @@ class RoomDataModule(pl.LightningDataModule):
             paths=splits["train"],
             transform=self.train_transform,
             label2idx=label2idx,
+            image_size=self.image_size,
         )
 
         self.val_dataset = RoomDataset(
-            paths=splits["val"], transform=self.test_transform, label2idx=label2idx
+            paths=splits["val"],
+            transform=self.test_transform,
+            label2idx=label2idx,
+            image_size=self.image_size,
         )
 
         self.test_dataset = RoomDataset(
-            paths=splits["test"], transform=self.test_transform, label2idx=label2idx
+            paths=splits["test"],
+            transform=self.test_transform,
+            label2idx=label2idx,
+            image_size=self.image_size,
         )
 
     def train_dataloader(self):
@@ -304,6 +322,7 @@ def main(
         precision=precision,
     )
     trainer.fit(model=model, datamodule=dm)
+    trainer.test(dataloaders=dm.test_dataloader())
 
 
 if __name__ == "__main__":
