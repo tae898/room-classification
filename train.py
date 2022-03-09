@@ -9,16 +9,21 @@ from glob import glob
 
 import albumentations as A
 import numpy as np
+
 # pytorch-lightning on top of PyTorch framework
 import pytorch_lightning as pl
+
 # PyTorch - deep learning framework
 import torch
 import torch.nn.functional as F
+
 # from pytorch_lightning.metrics.functional import accuracy
 import torchmetrics
 from albumentations.pytorch.transforms import ToTensorV2 as ToTensor
+
 # for efficient model transfer learning
 from efficientnet_pytorch import EfficientNet
+
 # for albumentations uses cv2 where as torchvision transforms uses PIL
 from PIL import Image
 from pytorch_lightning import seed_everything
@@ -27,7 +32,7 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
-from utils import resize_square_image
+from utils import crop_center_square
 
 
 def get_splits(
@@ -166,9 +171,9 @@ class RoomDataset(Dataset):
         img = Image.open(path)
         img = img.convert("RGB")
 
-        img = resize_square_image(img, width=self.image_size)
+        img = crop_center_square(img)
+        img = img.resize(size=(self.image_size, self.image_size))
         img = np.array(img)
-
         img = self.transform(image=img)
 
         # albumentations transform return a dictionary with "image" as key
