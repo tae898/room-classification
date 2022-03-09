@@ -19,6 +19,10 @@ You can download a pretrained model from [here](https://github.com/tae898/room-c
 
 1. Check out [`explore-data.ipynb`](explore-data.ipynb) to explore dataset.
 1. Run [`train.py`](train.py) to train.
+   ```sh
+   train.py [-h] [--seed SEED] [--batch-size BATCH_SIZE] [--image-size IMAGE_SIZE] [--limit-data LIMIT_DATA] [--num-classes NUM_CLASSES] [--data-dir DATA_DIR] [--efficientnet EFFICIENTNET] [--epochs EPOCHS]
+                   [--use-gpu] [--precision PRECISION] [--patience PATIENCE]
+   ```
 1. Check out [`evaluation.py`](evaluation.ipynb) to evaluate and see some samples.
 
 ## Deploying
@@ -45,8 +49,8 @@ There are two ways to run the server. You can either run it natively in Python o
 - Running natively in Python (GPUs are supported)
 
   1. First do [Prerequisites](#prerequisites)
-  2. Download [`model.ckpt`](https://github.com/tae898/room-classification/releases/download/v0.2/model.ckpt) and place it in the root repo directory.
-  3. ```sh
+  1. Download [`model.ckpt`](https://github.com/tae898/room-classification/releases/download/v0.2/model.ckpt) and place it in the root repo directory.
+  1. ```sh
      python app.py
      ```
 
@@ -55,11 +59,11 @@ There are two ways to run the server. You can either run it natively in Python o
 The Python client sends an image to the server. This image is either an image saved in your disk or your webcam stream.
 
 1. First do [Prerequisites](#prerequisites)
-2. Install requirements
+1. Install requirements
    ```sh
    pip install -r requirements-client.txt
    ```
-3. Run the [server](#server)
+1. Run the [server](#server)
 
 - Run the room-classifier on the image saved in your disk:
 
@@ -92,8 +96,8 @@ The Python client sends an image to the server. This image is either an image sa
 ## TODOs
 
 1. Make it lighter.
-2. Better docstring.
-3. More love.
+1. Better docstring.
+1. More love.
 
 ## Contributing
 

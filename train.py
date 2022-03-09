@@ -9,21 +9,16 @@ from glob import glob
 
 import albumentations as A
 import numpy as np
-
 # pytorch-lightning on top of PyTorch framework
 import pytorch_lightning as pl
-
 # PyTorch - deep learning framework
 import torch
 import torch.nn.functional as F
-
 # from pytorch_lightning.metrics.functional import accuracy
 import torchmetrics
 from albumentations.pytorch.transforms import ToTensorV2 as ToTensor
-
 # for efficient model transfer learning
 from efficientnet_pytorch import EfficientNet
-
 # for albumentations uses cv2 where as torchvision transforms uses PIL
 from PIL import Image
 from pytorch_lightning import seed_everything
