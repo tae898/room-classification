@@ -110,7 +110,7 @@ Contributions are what make the open source community such an amazing place to b
 1. Push to the Branch (`git push origin feature/AmazingFeature`)
 1. Open a Pull Request
 
-## Citation
+## Cite our work
 
 [![DOI](https://zenodo.org/badge/464516842.svg)](https://zenodo.org/badge/latestdoi/464516842)
 
