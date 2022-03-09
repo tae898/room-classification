@@ -293,6 +293,7 @@ def main(
     epochs: int,
     use_gpu: bool,
     precision: int,
+    patience: int,
 ) -> None:
     """Run training with the given arguments."""
 
@@ -306,7 +307,7 @@ def main(
         filename="{epoch}_{val_loss:.4f}_{val_acc:02f}",
     )
     early_stop_callback = EarlyStopping(
-        monitor="val_loss", min_delta=0.00, patience=3, verbose=True, mode="min"
+        monitor="val_loss", min_delta=0.00, patience=patience, verbose=True, mode="min"
     )
 
     dm = RoomDataModule(image_size=image_size, batch_size=batch_size)
@@ -336,7 +337,7 @@ if __name__ == "__main__":
         "--seed",
         type=int,
         default=42,
-        help="for reproducibility",
+        help="Set the random seed for reproducibility",
     )
     parser.add_argument(
         "--batch-size",
@@ -349,14 +350,14 @@ if __name__ == "__main__":
         "--image-size",
         type=int,
         default=300,
-        help="image width height",
+        help="height and width of target image.",
     )
 
     parser.add_argument(
         "--limit-data",
         type=float,
         default=1.0,
-        help="limit data. For example, 0.1 will only use 10% of the entire data.",
+        help="limit data. For example, 0.1 will only use 10 percent of the entire data.",
     )
 
     parser.add_argument(
@@ -376,7 +377,10 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--efficientnet", type=str, default="efficientnet-b3", help="b0, b1, b2, ..."
+        "--efficientnet",
+        type=str,
+        default="efficientnet-b3",
+        help="efficientnet-b0, efficientnet-b1, efficientnet-b2, ...",
     )
 
     parser.add_argument(
@@ -389,6 +393,10 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "--precision", type=int, default=16, help="GPU floating point precision"
+    )
+
+    parser.add_argument(
+        "--patience", type=int, default=3, help="Early stopping patience epochs."
     )
 
     args = vars(parser.parse_args())
