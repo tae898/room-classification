@@ -1,5 +1,7 @@
 # room-classification
 
+[![DOI](https://zenodo.org/badge/464516842.svg)](https://zenodo.org/badge/latestdoi/464516842)
+
 ## Data
 
 I got data from [here](https://drive.google.com/file/d/0BxDIywue_VABY1dRcFVvZ3BodnM/view?usp=sharing). You should apply for permission first. Download it and name it as `data`.
@@ -109,10 +111,6 @@ Contributions are what make the open source community such an amazing place to b
 1. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 1. Push to the Branch (`git push origin feature/AmazingFeature`)
 1. Open a Pull Request
-
-## Cite our work
-
-[![DOI](https://zenodo.org/badge/464516842.svg)](https://zenodo.org/badge/latestdoi/464516842)
 
 ## Authors
 
